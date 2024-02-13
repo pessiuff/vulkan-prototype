@@ -59,12 +59,13 @@ private:
         // get required extensions
         const char** glfw_required_extensions = glfwGetRequiredInstanceExtensions(&glfw_required_extension_count);
 
-
-        // bad code... but it works
+        // refactored the bad code
         int validated_count = 0;
-        for (int i = 0; i < glfw_extensions.size(); i++) {
-            for (int j = 0; j < glfw_required_extension_count; j++) {
-                if (strcmp(glfw_extensions.at(i).extensionName, glfw_required_extensions[j]) == 0) validated_count++;
+        for (const VkExtensionProperties& extension_supported : glfw_extensions) {
+            const char* extension_supported_name = extension_supported.extensionName;
+            for (int i = 0; i < glfw_required_extension_count; i++) {
+                const char* extension_required_name = glfw_required_extensions[i];
+                if (strcmp(extension_supported_name, extension_required_name) == 0) validated_count++;
             }
         }
 
